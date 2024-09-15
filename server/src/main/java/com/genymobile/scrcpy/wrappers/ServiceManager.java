@@ -12,7 +12,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 
 @SuppressLint("PrivateApi,DiscouragedPrivateApi")
-public final class ServiceManager {
+public class ServiceManager {
 
     private static final Method GET_SERVICE_METHOD;
 
@@ -33,7 +33,7 @@ public final class ServiceManager {
     private static ActivityManager activityManager;
     private static CameraManager cameraManager;
 
-    private ServiceManager() {
+    public ServiceManager() {
         /* not instantiable */
     }
 

@@ -11,13 +11,13 @@ import com.genymobile.scrcpy.wrappers.ServiceManager;
 import com.genymobile.scrcpy.wrappers.SurfaceControl;
 import com.genymobile.scrcpy.wrappers.WindowManager;
 
-import android.content.IOnPrimaryClipChangedListener;
+//import android.content.IOnPrimaryClipChangedListener;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.SystemClock;
-import android.view.IDisplayFoldListener;
-import android.view.IRotationWatcher;
+//import android.view.IDisplayFoldListener;
+//import android.view.IRotationWatcher;
 import android.view.InputDevice;
 import android.view.InputEvent;
 import android.view.KeyCharacterMap;
@@ -25,7 +25,7 @@ import android.view.KeyEvent;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public final class Device {
+public class Device {
 
     public static final int POWER_MODE_OFF = SurfaceControl.POWER_MODE_OFF;
     public static final int POWER_MODE_NORMAL = SurfaceControl.POWER_MODE_NORMAL;
@@ -49,30 +49,31 @@ public final class Device {
         void onClipboardTextChanged(String text);
     }
 
-    private final Rect crop;
-    private int maxSize;
-    private final int lockVideoOrientation;
+    protected Rect crop;
+    protected int maxSize;
+    protected int lockVideoOrientation;
 
-    private Size deviceSize;
-    private ScreenInfo screenInfo;
-    private RotationListener rotationListener;
-    private FoldListener foldListener;
-    private ClipboardListener clipboardListener;
-    private final AtomicBoolean isSettingClipboard = new AtomicBoolean();
+    protected Size deviceSize;
+    protected ScreenInfo screenInfo;
+    protected RotationListener rotationListener;
+    protected FoldListener foldListener;
+    protected ClipboardListener clipboardListener;
+    protected final AtomicBoolean isSettingClipboard = new AtomicBoolean();
 
     /**
      * Logical display identifier
      */
-    private final int displayId;
+    protected int displayId;
 
     /**
      * The surface flinger layer stack associated with this logical display
      */
-    private final int layerStack;
+    protected int layerStack;
 
-    private final boolean supportsInputEvents;
+    protected boolean supportsInputEvents;
 
     public Device(Options options) throws ConfigurationException {
+        if(true)return;
         displayId = options.getDisplayId();
         DisplayInfo displayInfo = ServiceManager.getDisplayManager().getDisplayInfo(displayId);
         if (displayInfo == null) {
@@ -90,6 +91,7 @@ public final class Device {
         screenInfo = ScreenInfo.computeScreenInfo(displayInfo.getRotation(), deviceSize, crop, maxSize, lockVideoOrientation);
         layerStack = displayInfo.getLayerStack();
 
+        /*
         ServiceManager.getWindowManager().registerRotationWatcher(new IRotationWatcher.Stub() {
             @Override
             public void onRotationChanged(int rotation) {
@@ -131,6 +133,7 @@ public final class Device {
             });
         }
 
+
         if (options.getControl() && options.getClipboardAutosync()) {
             // If control and autosync are enabled, synchronize Android clipboard to the computer automatically
             ClipboardManager clipboardManager = ServiceManager.getClipboardManager();
@@ -155,7 +158,10 @@ public final class Device {
             } else {
                 Ln.w("No clipboard manager, copy-paste between device and computer will not work");
             }
+
         }
+
+         */
 
         if ((displayInfoFlags & DisplayInfo.FLAG_SUPPORTS_PROTECTED_BUFFERS) == 0) {
             Ln.w("Display doesn't have FLAG_SUPPORTS_PROTECTED_BUFFERS flag, mirroring can be restricted");
@@ -393,7 +399,7 @@ public final class Device {
         }
     }
 
-    private static int getCurrentRotation(int displayId) {
+    protected static int getCurrentRotation(int displayId) {
         if (displayId == 0) {
             return ServiceManager.getWindowManager().getRotation();
         }

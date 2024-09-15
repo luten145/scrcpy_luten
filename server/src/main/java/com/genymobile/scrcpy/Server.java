@@ -32,7 +32,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class Server {
+public class Server {
 
     public static final String SERVER_PATH;
 
@@ -42,15 +42,15 @@ public final class Server {
         SERVER_PATH = classPaths[0];
     }
 
-    private static class Completion {
+    protected static class Completion {
         private int running;
         private boolean fatalError;
 
-        Completion(int running) {
+        public Completion(int running) {
             this.running = running;
         }
 
-        synchronized void addCompleted(boolean fatalError) {
+        public synchronized void addCompleted(boolean fatalError) {
             --running;
             if (fatalError) {
                 this.fatalError = true;
@@ -60,7 +60,7 @@ public final class Server {
             }
         }
 
-        synchronized void await() {
+        public synchronized void await() {
             try {
                 while (running > 0 && !fatalError) {
                     wait();
@@ -71,7 +71,7 @@ public final class Server {
         }
     }
 
-    private Server() {
+    public Server() {
         // not instantiable
     }
 
@@ -120,7 +120,7 @@ public final class Server {
         }
     }
 
-    private static void scrcpy(Options options) throws IOException, ConfigurationException {
+    protected void scrcpy(Options options) throws IOException, ConfigurationException {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S && options.getVideoSource() == VideoSource.CAMERA) {
             Ln.e("Camera mirroring is not supported before Android 12");
             throw new ConfigurationException("Camera mirroring is not supported");
@@ -233,13 +233,13 @@ public final class Server {
         }
     }
 
-    private static Thread startInitThread(final Options options, final CleanUp cleanUp) {
+    protected static Thread startInitThread(final Options options, final CleanUp cleanUp) {
         Thread thread = new Thread(() -> initAndCleanUp(options, cleanUp), "init-cleanup");
         thread.start();
         return thread;
     }
 
-    public static void main(String... args) {
+    public void main(String... args) {
         int status = 0;
         try {
             internalMain(args);
@@ -254,7 +254,7 @@ public final class Server {
         }
     }
 
-    private static void internalMain(String... args) throws Exception {
+    private void internalMain(String... args) throws Exception {
         Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
             Ln.e("Exception on thread " + t, e);
         });

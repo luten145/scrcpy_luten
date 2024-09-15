@@ -45,12 +45,15 @@ public final class DesktopConnection implements Closeable {
     }
 
     private static String getSocketName(int scid) {
+        /*
         if (scid == -1) {
             // If no SCID is set, use "scrcpy" to simplify using scrcpy-server alone
             return SOCKET_NAME_PREFIX;
         }
 
-        return SOCKET_NAME_PREFIX + String.format("_%08x", scid);
+         */
+
+        return SOCKET_NAME_PREFIX +"_71b150aa";//+ String.format("_%08x", scid);
     }
 
     public static DesktopConnection open(int scid, boolean tunnelForward, boolean video, boolean audio, boolean control, boolean sendDummyByte)
